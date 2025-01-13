@@ -311,7 +311,7 @@
         // При загрузке страницы вызывается функция для получения курсов валют, а также устанавливается интервал для их обновления каждые 10 минут
         window.onload = function() {
             fetchExchangeRates();
-            setInterval(fetchExchangeRates, 10 * 60 * 1000); // Обновление каждые 10 минут
+            setInterval(fetchExchangeRates, 5 * 60 * 1000); // Обновление каждые 10 минут
         };
     </script>
 </body>
