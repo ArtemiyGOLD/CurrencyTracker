@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CurrencyTracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #header {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        #nav {
+            width: 100%;
+            background-color: #0056b3;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        #nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        #currencyListContainer {
+            display: none;
+        }
+
+        #currencyList {
+            margin: 20px;
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid #ddd;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .currency-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .currency-item:last-child {
+            border-bottom: none;
+        }
+
+        #converter {
+            margin: 20px;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #converter label {
+            margin-right: 10px;
+        }
+
+        #converter input, #converter select, #converter button {
+            margin: 5px;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #converter button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+
+        #converter button:hover {
+            background-color: #0056b3;
+        }
+
+        #footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Медиазапросы для мобильных устройств */
+        @media (max-width: 768px) {
+            #nav {
+                flex-direction: column;
+            }
+
+            #nav a {
+                padding: 10px;
+                font-size: 20px;
+            }
+
+            #currencyList, #converter {
+                width: 100%;
+                padding: 10px;
+            }
+
+            #converter input, #converter select, #converter button {
+                width: calc(100% - 20px);
+                margin-bottom: 10px;
+            }
+
+            #converter button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">CurrencyTracker</div>
+
+    <div id="nav">
+        <a href="#" onclick="showSection('currencyListContainer')">Главная</a>
+        <a href="#" onclick="showSection('chartsContainer')">Графики</a>
+        <a href="#" onclick="showSection('converter')">Конвертер</a>
+        <a href="#">Мой аккаунт</a>
+    </div>
+
+    <div id="currencyListContainer">
+        <div id="currencyList">
+            <div class="currency-item">
+                <span>USD/EUR</span>
+                <span>0.85</span>
+            </div>
+            <div class="currency-item">
+                <span>GBP/USD</span>
+                <span>1.39</span>
+            </div>
+            <div class="currency-item">
+                <span>JPY/GBP</span>
+                <span>0.0073</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="converter">
+        <h2>Конвертер валют</h2>
+        <label for="amount">Сумма:</label>
+        <input type="number" id="amount" placeholder="Введите сумму">
+        <label for="fromCurrency">Из:</label>
+        <select id="fromCurrency"></select>
+        <label for="toCurrency">В:</label>
+        <select id="toCurrency"></select>
+        <button onclick="convertCurrency()">Конвертировать</button>
+        <p id="conversionResult"></p>
+    </div>
+
+    <div id="footer">&#169; 2025 CurrencyTracker</div>
+
+    <script>
+        function showSection(sectionId) {
+            document.getElementById('currencyListContainer').style.display = 'none';
+            document.getElementById('converter').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        async function fetchExchangeRates() {
+            try {
+                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                updateCurrencyList(data.rates);
+                populateCurrencyOptions(data.rates);
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+            }
+        }
+
+        function updateCurrencyList(rates) {
+            const currencyList = document.getElementById('currencyList');
+            currencyList.innerHTML = '';
+            for (const [currency, rate] of Object.entries(rates)) {
+                const currencyItem = document.createElement('div');
+                currencyItem.className = 'currency-item';
+                currencyItem.innerHTML = `<span>USD/${currency}</span><span>${rate.toFixed(2)}</span>`;
+                currencyList.appendChild(currencyItem);
+            }
+        }
+
+        function populateCurrencyOptions(rates) {
+            const fromCurrency = document.getElementById('fromCurrency');
+            const toCurrency = document.getElementById('toCurrency');
+            fromCurrency.innerHTML = ''; // Clear existing options
+            toCurrency.innerHTML = ''; // Clear existing options
+            for (const currency in rates) {
+                const option1 = document.createElement('option');
+                option1.value = currency;
+                option1.textContent = currency;
+                fromCurrency.appendChild(option1);
+                const option2 = option1.cloneNode(true);
+                toCurrency.appendChild(option2);
+            }
+        }
+
+        function convertCurrency() {
+            const amount = document.getElementById('amount').value;
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+
+            if (!amount || !fromCurrency || !toCurrency) {
+                document.getElementById('conversionResult').textContent = 'Пожалуйста, заполните все поля.';
+                return;
+            }
+
+            fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`)
+                .then(response => response.json())
+                .then(data => {
+                    const rate = data.rates[toCurrency];
+                    const result = amount * rate;
+                    document.getElementById('conversionResult').textContent = `${amount} ${fromCurrency} = ${result.toFixed(2)} ${toCurrency}`;
+                })
+                .catch(error => {
+                    console.error('Ошибка при конвертации:', error);
+                    document.getElementById('conversionResult').textContent = 'Ошибка при конвертации валют.';
+                });
+        }
+
+        window.onload = fetchExchangeRates;
+    </script>
+</body>
+</html>
