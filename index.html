@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CurrencyTracker</title>
-    <!-- Подключение иконки сайта -->
     <link rel="icon" href="Images/ico.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Основные стили для страницы */
+        /* Основные стили для страницы, установка фона, шрифтов и выравнивания */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -16,36 +16,37 @@
             justify-content: center;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4; /* Светлый фон для контраста */
+            background-color: #f4f4f4;
         }
 
-        /* Стили для заголовка */
+        /* Стили для заголовка страницы */
         #header {
             width: 100%;
-            background-color: #007bff; /* Синий фон */
+            background-color: #007bff;
             color: white;
             padding: 10px 0;
             text-align: center;
             font-size: 24px;
         }
 
-        /* Стили для навигационного меню */
+        /* Стили для навигационной панели */
         #nav {
             width: 100%;
-            background-color: #0056b3; /* Темно-синий фон */
+            background-color: #0056b3;
             color: white;
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
         }
 
+        /* Стили для ссылок в навигационной панели */
         #nav a {
             color: white;
             text-decoration: none;
             font-size: 18px;
         }
 
-        /* Контейнер для списка валют, по умолчанию скрыт */
+        /* Контейнер для списка валют, скрыт по умолчанию */
         #currencyListContainer {
             display: none;
         }
@@ -60,6 +61,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Стили для элементов списка валют */
         .currency-item {
             display: flex;
             justify-content: space-between;
@@ -67,11 +69,12 @@
             border-bottom: 1px solid #ddd;
         }
 
+        /* Убираем нижнюю границу у последнего элемента списка валют */
         .currency-item:last-child {
             border-bottom: none;
         }
 
-        /* Стили для блока конвертера валют */
+        /* Стили для конвертера валют */
         #converter {
             margin: 20px;
             width: 90%;
@@ -82,11 +85,12 @@
             text-align: center;
         }
 
-        /* Стили для элементов формы конвертера */
+        /* Стили для меток в конвертере валют */
         #converter label {
             margin-right: 10px;
         }
 
+        /* Стили для полей ввода и кнопок в конвертере валют */
         #converter input, #converter select, #converter button {
             margin: 5px;
             padding: 8px;
@@ -102,11 +106,12 @@
             border: none;
         }
 
+        /* Стили для кнопки при наведении курсора */
         #converter button:hover {
-            background-color: #0056b3; /* Цвет кнопки при наведении */
+            background-color: #0056b3;
         }
 
-        /* Стили для нижнего колонтитула */
+        /* Стили для футера */
         #footer {
             margin-top: 20px;
             text-align: center;
@@ -150,13 +155,25 @@
             background-color: #f9f9f9;
             border: 1px solid #ddd;
         }
+
+        /* Стили для графиков */
+        #chartsContainer {
+            margin: 20px;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <!-- Заголовок страницы -->
     <div id="header">CurrencyTracker</div>
 
-    <!-- Навигационное меню -->
+    <!-- Навигационная панель с ссылками на различные разделы -->
     <div id="nav">
         <a href="#" onclick="showSection('currencyListContainer')">Список валют</a>
         <a href="#" onclick="showSection('chartsContainer')">Графики</a>
@@ -164,9 +181,8 @@
         <a href="#" onclick="showSection('contactsContainer')">Контакты</a>
     </div>
 
-    <!-- Рекламный баннер в верхней части страницы -->
+    <!-- Рекламный баннер вверху страницы -->
     <div class="ad-banner">
-        <!-- Код для отображения рекламы -->
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <ins class="adsbygoogle"
              style="display:block"
@@ -181,6 +197,7 @@
     <!-- Контейнер для списка валют -->
     <div id="currencyListContainer">
         <div id="currencyList">
+            <!-- Пример отображения курсов валют -->
             <div class="currency-item">
                 <span>USD/EUR</span>
                 <span>0.85</span>
@@ -196,7 +213,7 @@
         </div>
     </div>
 
-    <!-- Контейнер для конвертера валют -->
+    <!-- Конвертер валют -->
     <div id="converter">
         <h2>Конвертер валют</h2>
         <label for="amount">Сумма:</label>
@@ -209,14 +226,20 @@
         <p id="conversionResult"></p>
     </div>
 
-    <!-- Контейнер для контактной информации -->
+    <!-- Контейнер для графиков -->
+    <div id="chartsContainer">
+        <h2>График динамики доллара</h2>
+        <canvas id="usdChart"></canvas>
+    </div>
+
+    <!-- Контакты -->
     <div id="contactsContainer" style="display:none;">
         <h2>Контакты</h2>
         <p>Telegram: <a href="https://t.me/Artemonski16" target="_blank">@Artemonski16</a></p>
         <p>Telegram-канал: <a href="https://t.me/koder_16" target="_blank">@koder_16</a></p>
     </div>
 
-    <!-- Рекламный баннер в нижней части страницы -->
+    <!-- Рекламный баннер внизу страницы -->
     <div class="ad-banner">
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <ins class="adsbygoogle"
@@ -229,19 +252,20 @@
         </script>
     </div>
 
-    <!-- Нижний колонтитул страницы -->
+    <!-- Футер страницы -->
     <div id="footer">© 2025 CurrencyTracker</div>
 
     <script>
-        // Функция для отображения выбранного раздела
+        /* Функция для отображения определенного раздела страницы */
         function showSection(sectionId) {
             document.getElementById('currencyListContainer').style.display = 'none';
             document.getElementById('converter').style.display = 'none';
             document.getElementById('contactsContainer').style.display = 'none';
+            document.getElementById('chartsContainer').style.display = 'none';
             document.getElementById(sectionId).style.display = 'block';
         }
 
-        // Асинхронная функция для получения курсов валют
+        /* Функция для получения и обновления курсов валют */
         async function fetchExchangeRates() {
             try {
                 const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
@@ -251,12 +275,13 @@
                 const data = await response.json();
                 updateCurrencyList(data.rates);
                 populateCurrencyOptions(data.rates);
+                updateChart(data);
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
             }
         }
 
-        // Функция для обновления списка валют
+        /* Функция для обновления списка валют на странице */
         function updateCurrencyList(rates) {
             const currencyList = document.getElementById('currencyList');
             currencyList.innerHTML = '';
@@ -268,7 +293,7 @@
             }
         }
 
-        // Функция для заполнения выпадающих списков валют
+        /* Функция для заполнения выпадающих списков валют */
         function populateCurrencyOptions(rates) {
             const fromCurrency = document.getElementById('fromCurrency');
             const toCurrency = document.getElementById('toCurrency');
@@ -284,7 +309,7 @@
             }
         }
 
-        // Функция для конвертации валюты
+        /* Функция для конвертации валют */
         function convertCurrency() {
             const amount = document.getElementById('amount').value;
             const fromCurrency = document.getElementById('fromCurrency').value;
@@ -308,10 +333,38 @@
                 });
         }
 
-        // При загрузке страницы вызывается функция для получения курсов валют, а также устанавливается интервал для их обновления каждые 10 минут
+        /* Функция для обновления графика с динамикой курса доллара */
+        function updateChart(data) {
+            const ctx = document.getElementById('usdChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(data.rates),
+                    datasets: [{
+                        label: 'USD Exchange Rate',
+                        data: Object.values(data.rates),
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        /* Автоматическое обновление курсов валют каждые 10 минут */
         window.onload = function() {
             fetchExchangeRates();
-            setInterval(fetchExchangeRates, 5 * 60 * 1000); // Обновление каждые 10 минут
+            setInterval(fetchExchangeRates, 10 * 60 * 1000);
         };
     </script>
 </body>
