@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CurrencyTracker</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9790825413845545"
-     crossorigin="anonymous"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -104,11 +102,6 @@
             font-size: 14px;
             color: #666;
         }
-        #adds {
-            text-align: center;
-            font-size: 14px;
-            color: #666;
-        }
 
         /* Медиазапросы для мобильных устройств */
         @media (max-width: 768px) {
@@ -135,6 +128,16 @@
                 font-size: 16px;
             }
         }
+
+        .ad-banner {
+            width: 100%;
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +148,20 @@
         <a href="#" onclick="showSection('chartsContainer')">Графики</a>
         <a href="#" onclick="showSection('converter')">Конвертер</a>
         <a href="#">Мой аккаунт</a>
+    </div>
+
+    <!-- Рекламный баннер вверху страницы -->
+    <div class="ad-banner">
+        <!-- Код рекламы -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXX"
+             data-ad-format="auto"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
 
     <div id="currencyListContainer">
@@ -176,8 +193,21 @@
         <p id="conversionResult"></p>
     </div>
 
+    <!-- Рекламный баннер внизу страницы -->
+    <div class="ad-banner">
+        <!-- Код рекламы -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXX"
+             data-ad-format="auto"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
     <div id="footer">&#169; 2025 CurrencyTracker</div>
-    <div id="adds">Мой тгк: <a href="https://t.me/koder_16">ТЫК</a></div>
 
     <script>
         function showSection(sectionId) {
